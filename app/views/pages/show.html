@@ -1,0 +1,36 @@
+<style type="text/css">
+  .even-page {
+    border: 1px solid black;
+    width: 875px; /* 12.125in = 873px content plus 2 for border */
+    height: 866px; /* 12in = 864px + 2 for border */
+    position: relative;
+  }
+  .container {
+    position: absolute;
+    border: 1px dotted #aaa;
+  }
+</style>
+
+<div id="the-page" class="even-page">
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    pageJson = <%= raw(page.to_json) %>;
+
+    var $thePage = $('#the-page');
+    $.each(pageJson.containers, function(index, container) {
+      var containerElement = $('<div>', { id: container.id }).
+        attr('class', 'container').
+        css('left', container.x + 'px').
+        css('top', container.y + 'px').
+        css('width', container.width + 'px').
+        css('height', container.height + 'px');
+      $thePage.append(containerElement);
+    });
+  });
+</script>
+
+
+
+
