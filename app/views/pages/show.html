@@ -1,11 +1,12 @@
 <style type="text/css">
   .even-page {
     border: 1px solid black;
-    width: 875px; /* 12.125in = 873px content plus 2 for border */
-    height: 866px; /* 12in = 864px + 2 for border */
+    width: 875px; /* 12.125in = 873px + 2px for border */
+    height: 866px; /* 12in = 864px + 2px for border */
     position: relative;
   }
   .container {
+    box-sizing: border-box;
     position: absolute;
     border: 1px dotted #aaa;
   }
