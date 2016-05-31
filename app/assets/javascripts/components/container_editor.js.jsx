@@ -2,11 +2,19 @@ window.ContainerEditor = React.createClass({
   getInitialState: function() {
     return {
       id: this.props.container.id,
-      x: this.props.container.x,
-      y: this.props.container.y,
-      width: this.props.container.width,
-      height: this.props.container.height
+      x: this.pixelsToInches(this.props.container.x),
+      y: this.pixelsToInches(this.props.container.y),
+      width: this.pixelsToInches(this.props.container.width),
+      height: this.pixelsToInches(this.props.container.height)
     };
+  },
+
+  pixelsToInches: function(value) {
+    return parseFloat(value) / 72.0;
+  },
+
+  inchesToPixels: function(value) {
+    return parseFloat(value) * 72.0;
   },
 
   changed: function(e) {
@@ -17,7 +25,28 @@ window.ContainerEditor = React.createClass({
 
   handleUpdate: function(e) {
     e.preventDefault();
-    this.props.onUpdate(this.state);
+    this.props.onUpdate({
+      id: this.state.id,
+      x: this.inchesToPixels(this.state.x),
+      y: this.inchesToPixels(this.state.y),
+      width: this.inchesToPixels(this.state.width),
+      height: this.inchesToPixels(this.state.height)
+    });
+  },
+
+  editorField: function(name, label, value) {
+    return(
+      <div className="field">
+        <label for={ name }>{ label }:</label>
+        <input
+          type="text"
+          name={ name }
+          value={ value }
+          onChange={ this.changed }
+          onBlur={ this.handleUpdate }
+        />
+      </div>
+    );
   },
 
   render: function() {
@@ -25,22 +54,10 @@ window.ContainerEditor = React.createClass({
       <div id="container-editor">
         Edit container: {this.props.container.id}
         <form>
-          <div className="field">
-            <label for="y">Top:</label>
-            <input type="text" name="y" value={this.state.y} onChange={this.changed} onBlur={this.handleUpdate} />
-         </div>
-          <div className="field">
-            <label for="x">Left:</label>
-            <input type="text" name="x" value={this.state.x} onChange={this.changed} onBlur={this.handleUpdate} />
-          </div>
-          <div className="field">
-            <label for="width">Width:</label>
-            <input type="text" name="width" value={this.state.width} onChange={this.changed} onBlur={this.handleUpdate} />
-          </div>
-          <div className="field">
-            <label for="height">Height:</label>
-            <input type="text" name="height" value={this.state.height} onChange={this.changed} onBlur={this.handleUpdate}/>
-          </div>
+          { this.editorField('y', 'Top', this.state.y) }
+          { this.editorField('x', 'Left', this.state.x) }
+          { this.editorField('width', 'Width', this.state.width) }
+          { this.editorField('height', 'Height', this.state.height) }
         </form>
       </div>
     );
