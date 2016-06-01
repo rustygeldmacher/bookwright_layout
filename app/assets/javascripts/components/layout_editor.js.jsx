@@ -1,9 +1,32 @@
 window.LayoutEditor = React.createClass({
   getInitialState: function() {
     return {
-      containers: this.props.containers,
+      currentPage: null,
+      containers: [],
       selectedContainerId: null
     };
+  },
+
+  componentDidMount: function() {
+    this.loadPageData(1);
+  },
+
+  loadPageData: function(pageNumber) {
+    let pageUrl = '/books/1/pages/' + pageNumber;
+    $.get(pageUrl).done(function(data) {
+      this.setState({
+        currentPage: pageNumber,
+        containers: data.containers
+      });
+    }.bind(this));
+  },
+
+  loadNextPage: function() {
+    this.loadPageData(this.state.currentPage + 1);
+  },
+
+  loadPreviousPage: function() {
+    this.loadPageData(this.state.currentPage - 1);
   },
 
   containerSelected: function(e) {
@@ -36,6 +59,16 @@ window.LayoutEditor = React.createClass({
         onUpdate={this.updateContainer}
       />;
     }
+
+    let pageNavigation = null;
+    if (this.state.currentPage) {
+      pageNavigation = <PageNavigation
+        currentPage={this.state.currentPage}
+        onNext={this.loadNextPage}
+        onPrev={this.loadPreviousPage}
+      />;
+    }
+
     return(
       <div id="layout-editor">
         <Page
@@ -43,7 +76,10 @@ window.LayoutEditor = React.createClass({
           selectedContainerId={this.state.selectedContainerId}
           onContainerSelected={this.containerSelected}
         />
-        { containerEditor }
+        <div id="sidebar">
+          { pageNavigation }
+          { containerEditor }
+        </div>
       </div>
     );
   }

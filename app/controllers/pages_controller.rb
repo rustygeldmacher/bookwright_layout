@@ -1,7 +1,6 @@
 class PagesController < ApplicationController
-  helper_method :page
-
   def show
+    render json: page
   end
 
   private
