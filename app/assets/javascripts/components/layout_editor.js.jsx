@@ -16,6 +16,7 @@ window.LayoutEditor = React.createClass({
     $.get(pageUrl).done(function(data) {
       this.setState({
         currentPage: pageNumber,
+        selectedContainerId: null,
         containers: data.containers,
         margins: data.margins
       });

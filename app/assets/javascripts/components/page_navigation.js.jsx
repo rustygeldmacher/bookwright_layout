@@ -17,7 +17,7 @@ window.PageNavigation = React.createClass({
   render: function() {
     return(
       <div id="page-navigation" className="sidebar">
-        <a href="#" onClick={this.prevClicked}>&laquo;</a>
+        <a href="#" onClick={this.previousClicked}>&laquo;</a>
         Page: { this.props.currentPage }
         <a href="#" onClick={this.nextClicked}>&raquo;</a>
         <div className="actions">
