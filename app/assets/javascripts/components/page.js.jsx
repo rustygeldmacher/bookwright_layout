@@ -17,9 +17,30 @@ window.Page = React.createClass({
       );
     }.bind(this));
 
+    let marginBox = null;
+    if (this.props.margins) {
+      const margins = this.props.margins;
+      let borderWidth = [margins.top, margins.left, margins.bottom, margins.right].map(function(width) {
+        return width + 'px';
+      }).join(' ');
+
+      let marginStyles = {
+        boxSizing: 'border-box',
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        borderStyle: 'solid',
+        borderColor: '#dfbfdf',
+        borderWidth: borderWidth,
+        opacity: 0.2
+      };
+      marginBox = <div id="margins" style={ marginStyles }></div>;
+    }
+
     return(
       <div id="the-page" className="even-page">
-        {containers}
+        { marginBox }
+        { containers }
       </div>
     );
   }

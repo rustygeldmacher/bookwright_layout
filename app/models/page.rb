@@ -5,6 +5,10 @@ class Page
     @xml = xml
   end
 
+  def page_number
+    xml.get('number').to_i
+  end
+
   def update(container_json)
     container_json.each do |container|
       container_xml = xml.css("container[id=\"#{container['id']}\"]").first
@@ -16,6 +20,12 @@ class Page
 
   def as_json(options = {})
     {
+      margins: {
+        top: 36,
+        right: page_number.even? ? 108 : 144,
+        bottom: 36,
+        left: page_number.even? ? 144 : 108
+      },
       containers: xml.css('container').map do |container|
         {
           id: container.get('id'),

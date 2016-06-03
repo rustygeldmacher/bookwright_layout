@@ -16,7 +16,8 @@ window.LayoutEditor = React.createClass({
     $.get(pageUrl).done(function(data) {
       this.setState({
         currentPage: pageNumber,
-        containers: data.containers
+        containers: data.containers,
+        margins: data.margins
       });
     }.bind(this));
   },
@@ -87,6 +88,7 @@ window.LayoutEditor = React.createClass({
     return(
       <div id="layout-editor">
         <Page
+          margins={this.state.margins}
           containers={this.state.containers}
           selectedContainerId={this.state.selectedContainerId}
           onContainerSelected={this.containerSelected}
