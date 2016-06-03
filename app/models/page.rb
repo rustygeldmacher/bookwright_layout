@@ -5,6 +5,15 @@ class Page
     @xml = xml
   end
 
+  def update(container_json)
+    container_json.each do |container|
+      container_xml = xml.css("container[id=\"#{container['id']}\"]").first
+      %w[x y width height].each do |attribute|
+        container_xml.set(attribute, container[attribute].to_s)
+      end
+    end
+  end
+
   def as_json(options = {})
     {
       containers: xml.css('container').map do |container|

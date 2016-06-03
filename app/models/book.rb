@@ -2,6 +2,7 @@ class Book < ActiveRecord::Base
   self.table_name = 'Files'
   self.primary_key = 'filepath'
 
+  before_save :set_filecontent
   before_save :set_file_size
 
   def self.current
@@ -19,7 +20,11 @@ class Book < ActiveRecord::Base
     @xml ||= Oga.parse_xml(filecontent)
   end
 
+  def set_filecontent
+    self.filecontent = xml.to_xml.gsub("'", "''")
+  end
+
   def set_file_size
-    self.filesize = xml.bytesize
+    self.filesize = xml.to_xml.bytesize
   end
 end
