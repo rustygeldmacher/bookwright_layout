@@ -3,6 +3,10 @@ class PagesController < ApplicationController
     render json: page
   end
 
+  def update
+    render nothing: 200
+  end
+
   private
 
   def page

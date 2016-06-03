@@ -21,6 +21,20 @@ window.LayoutEditor = React.createClass({
     }.bind(this));
   },
 
+  savePageData: function() {
+    let pageUrl = '/books/1/pages/' + this.state.currentPage;
+    $.ajax({
+      url: pageUrl,
+      method: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        containers: this.state.containers
+      })
+    }).done(function(data) {
+      console.log('saved!');
+    }.bind(this));
+  },
+
   loadNextPage: function() {
     this.loadPageData(this.state.currentPage + 1);
   },
@@ -66,6 +80,7 @@ window.LayoutEditor = React.createClass({
         currentPage={this.state.currentPage}
         onNext={this.loadNextPage}
         onPrev={this.loadPreviousPage}
+        onSave={this.savePageData}
       />;
     }
 

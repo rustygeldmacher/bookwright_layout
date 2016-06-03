@@ -14,6 +14,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 gem 'oga'
 gem 'react-rails'
+gem 'pry-byebug'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
