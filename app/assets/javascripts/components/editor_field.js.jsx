@@ -23,7 +23,9 @@ window.EditorField = React.createClass({
   },
 
   handleBlur: function(e) {
-    this.props.onChange(this.props.name, this.state.value);
+    if (String(this.state.value) !== String(this.props.initialValue)) {
+      this.props.onChange(this.props.name, this.state.value);
+    }
   },
 
   render: function() {
