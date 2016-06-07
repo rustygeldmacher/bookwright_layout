@@ -11,6 +11,10 @@ window.EditorField = React.createClass({
     });
   },
 
+  valueHasChanged: function() {
+    return String(this.state.value) !== String(this.props.initialValue);
+  },
+
   handleFocus: function(e) {
     var target = e.target;
     setTimeout(function() {
@@ -18,12 +22,21 @@ window.EditorField = React.createClass({
     }, 0);
   },
 
+  handleKeyDown: function(e) {
+    if (e.keyCode == 27) {
+      // Escape key was pressed, reset our value if needed
+      if (this.valueHasChanged()) {
+        this.setState({value: this.props.initialValue});
+      }
+    }
+  },
+
   handleChange: function(e) {
     this.setState({value: e.target.value});
   },
 
   handleBlur: function(e) {
-    if (String(this.state.value) !== String(this.props.initialValue)) {
+    if (this.valueHasChanged()) {
       this.props.onChange(this.props.name, this.state.value);
     }
   },
@@ -33,6 +46,7 @@ window.EditorField = React.createClass({
       type="text"
       name={ this.props.name }
       value={ this.state.value }
+      onKeyDown={ this.handleKeyDown }
       onChange={ this.handleChange }
       onBlur={ this.handleBlur }
       onFocus={ this.handleFocus }
