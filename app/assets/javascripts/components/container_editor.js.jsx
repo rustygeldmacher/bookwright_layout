@@ -1,39 +1,4 @@
 window.ContainerEditor = React.createClass({
-  getInitialState: function() {
-    return this.calculateDimensions(this.props);
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    this.setState(this.calculateDimensions(nextProps));
-  },
-
-  calculateDimensions: function(dimensions) {
-    return {
-      x: this.pixelsToInches(dimensions.x - this.leftAdjustment(dimensions)),
-      y: this.pixelsToInches(dimensions.y - this.topAdjustment(dimensions)),
-      width: this.pixelsToInches(dimensions.width),
-      height: this.pixelsToInches(dimensions.height),
-    };
-  },
-
-  topAdjustment: function(dimensions) {
-    switch(dimensions.distanceFrom) {
-      case 'margins':
-        return dimensions.marginTop;
-      default:
-        return 0;
-    }
-  },
-
-  leftAdjustment: function(dimensions) {
-    switch(dimensions.distanceFrom) {
-      case 'margins':
-        return dimensions.marginLeft;
-      default:
-        return 0;
-    }
-  },
-
   pixelsToInches: function(value) {
     return parseFloat(value) / 72.0;
   },
@@ -42,41 +7,65 @@ window.ContainerEditor = React.createClass({
     return parseFloat(value) * 72.0;
   },
 
-  changed: function(e) {
-    let changedState = {};
-    changedState[e.target.name] = e.target.value;
-    this.setState(changedState);
+  topAdjustment: function() {
+    switch(this.props.distanceFrom) {
+      case 'margins':
+        return this.props.marginTop;
+      default:
+        return 0;
+    }
   },
 
-  handleUpdate: function(e) {
-    e.preventDefault();
-    this.props.onUpdate({
-      id: this.props.containerId,
-      x: this.inchesToPixels(this.state.x) + this.leftAdjustment(this.props),
-      y: this.inchesToPixels(this.state.y) + this.topAdjustment(this.props),
-      width: this.inchesToPixels(this.state.width),
-      height: this.inchesToPixels(this.state.height)
-    });
+  leftAdjustment: function() {
+    switch(this.props.distanceFrom) {
+      case 'margins':
+        return this.props.marginLeft;
+      default:
+        return 0;
+    }
   },
 
-  handleFocus: function(e) {
-    var target = e.target;
-    setTimeout(function() {
-      target.select();
-    }, 0);
+  convertInbound: function(name, value) {
+    switch(name) {
+      case 'x':
+        return this.pixelsToInches(parseFloat(value) - this.leftAdjustment());
+      case 'y':
+        return this.pixelsToInches(parseFloat(value) - this.topAdjustment());
+      case 'width':
+        return this.pixelsToInches(value);
+      case 'height':
+        return this.pixelsToInches(value);
+    }
+  },
+
+  convertOutbound: function(name, value) {
+    switch(name) {
+      case 'x':
+        return this.inchesToPixels(value) + this.leftAdjustment();
+      case 'y':
+        return this.inchesToPixels(value) + this.topAdjustment();
+      case 'width':
+        return this.inchesToPixels(value);
+      case 'height':
+        return this.inchesToPixels(value);
+    }
+  },
+
+  valueEdited: function(name, value) {
+    let updates = {};
+    updates[name] = this.convertOutbound(name, value);
+    this.props.onUpdate(this.props.containerId, updates);
   },
 
   editorField: function(name, label, value) {
+    let initialValue = this.convertInbound(name, value);
     return(
       <div className="field">
         <label for={ name }>{ label }:</label>
-        <input
-          type="text"
+        <EditorField
           name={ name }
-          value={ value }
-          onChange={ this.changed }
-          onBlur={ this.handleUpdate }
-          onFocus={ this.handleFocus }
+          initialValue={ initialValue }
+          onChange={ this.valueEdited }
         />
       </div>
     );
@@ -101,10 +90,10 @@ window.ContainerEditor = React.createClass({
       <div id="container-editor">
         Edit container: {this.props.containerId}
         <form>
-          { this.editorField('y', 'Top', this.state.y) }
-          { this.editorField('x', 'Left', this.state.x) }
-          { this.editorField('width', 'Width', this.state.width) }
-          { this.editorField('height', 'Height', this.state.height) }
+          { this.editorField('y', 'Top', this.props.y) }
+          { this.editorField('x', 'Left', this.props.x) }
+          { this.editorField('width', 'Width', this.props.width) }
+          { this.editorField('height', 'Height', this.props.height) }
           <span>Distances from:</span>
           <div>
             { this.distanceFromRadio('edges') } Edges

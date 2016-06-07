@@ -62,12 +62,12 @@ window.LayoutEditor = React.createClass({
     });
   },
 
-  updateContainer: function(values) {
-    let container = this.findContainer(values.id);
-    container.x = values.x;
-    container.y = values.y;
-    container.width = values.width;
-    container.height = values.height;
+  updateContainer: function(containerId, updates) {
+    let container = this.findContainer(containerId);
+    for (var key in updates) {
+      container[key] = updates[key];
+    }
+
     this.setState(this.state);
   },
 
@@ -80,7 +80,6 @@ window.LayoutEditor = React.createClass({
   render: function() {
     var containerEditor = null;
     if (this.state.selectedContainerId) {
-      debugger;
       let selectedContainer = this.findContainer(this.state.selectedContainerId);
       containerEditor = <ContainerEditor
         key={this.state.selectedContainerId}

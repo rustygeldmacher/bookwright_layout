@@ -1,6 +1,6 @@
 - Allow for math expressions in the text entries
 - Allow measurements from nearest neighbor
-- Manual adjust using arrow keys
+- Manual adjust input using arrow keys
 - Alert when you try to page forward w/o saving
 - Make backup before saving
 - Allow showing pictures
