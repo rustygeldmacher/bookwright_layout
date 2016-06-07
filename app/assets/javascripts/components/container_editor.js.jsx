@@ -1,12 +1,37 @@
 window.ContainerEditor = React.createClass({
   getInitialState: function() {
+    return this.calculateDimensions(this.props);
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this.setState(this.calculateDimensions(nextProps));
+  },
+
+  calculateDimensions: function(dimensions) {
     return {
-      id: this.props.container.id,
-      x: this.pixelsToInches(this.props.container.x),
-      y: this.pixelsToInches(this.props.container.y),
-      width: this.pixelsToInches(this.props.container.width),
-      height: this.pixelsToInches(this.props.container.height)
+      x: this.pixelsToInches(dimensions.x - this.leftAdjustment(dimensions)),
+      y: this.pixelsToInches(dimensions.y - this.topAdjustment(dimensions)),
+      width: this.pixelsToInches(dimensions.width),
+      height: this.pixelsToInches(dimensions.height),
     };
+  },
+
+  topAdjustment: function(dimensions) {
+    switch(dimensions.distanceFrom) {
+      case 'margins':
+        return dimensions.marginTop;
+      default:
+        return 0;
+    }
+  },
+
+  leftAdjustment: function(dimensions) {
+    switch(dimensions.distanceFrom) {
+      case 'margins':
+        return dimensions.marginLeft;
+      default:
+        return 0;
+    }
   },
 
   pixelsToInches: function(value) {
@@ -26,9 +51,9 @@ window.ContainerEditor = React.createClass({
   handleUpdate: function(e) {
     e.preventDefault();
     this.props.onUpdate({
-      id: this.state.id,
-      x: this.inchesToPixels(this.state.x),
-      y: this.inchesToPixels(this.state.y),
+      id: this.props.containerId,
+      x: this.inchesToPixels(this.state.x) + this.leftAdjustment(this.props),
+      y: this.inchesToPixels(this.state.y) + this.topAdjustment(this.props),
       width: this.inchesToPixels(this.state.width),
       height: this.inchesToPixels(this.state.height)
     });
@@ -49,15 +74,34 @@ window.ContainerEditor = React.createClass({
     );
   },
 
+  measureDistanceFromChanged: function(e) {
+    this.props.onMeasureDistanceFromChanged(e.target.value);
+  },
+
+  distanceFromRadio: function(value) {
+    let checked = this.props.distanceFrom == value ? 'checked' : '';
+    return <input type="radio"
+      name="distance-from"
+      value={value}
+      checked={checked}
+      onChange={this.measureDistanceFromChanged}
+    />;
+  },
+
   render: function() {
     return(
       <div id="container-editor">
-        Edit container: {this.props.container.id}
+        Edit container: {this.props.containerId}
         <form>
           { this.editorField('y', 'Top', this.state.y) }
           { this.editorField('x', 'Left', this.state.x) }
           { this.editorField('width', 'Width', this.state.width) }
           { this.editorField('height', 'Height', this.state.height) }
+          <span>Distances from:</span>
+          <div>
+            { this.distanceFromRadio('edges') } Edges
+            { this.distanceFromRadio('margins') } Margins
+          </div>
         </form>
       </div>
     );

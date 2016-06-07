@@ -20,7 +20,7 @@ window.Page = React.createClass({
     let marginBox = null;
     if (this.props.margins) {
       const margins = this.props.margins;
-      let borderWidth = [margins.top, margins.left, margins.bottom, margins.right].map(function(width) {
+      let borderWidth = [margins.top, margins.right, margins.bottom, margins.left].map(function(width) {
         return width + 'px';
       }).join(' ');
 

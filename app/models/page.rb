@@ -22,9 +22,9 @@ class Page
     {
       margins: {
         top: 36,
-        right: page_number.even? ? 108 : 144,
+        right: page_number.even? ? 144 : 108,
         bottom: 36,
-        left: page_number.even? ? 144 : 108
+        left: page_number.even? ? 108 : 144
       },
       containers: xml.css('container').map do |container|
         {

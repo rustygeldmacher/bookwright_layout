@@ -3,7 +3,8 @@ window.LayoutEditor = React.createClass({
     return {
       currentPage: null,
       containers: [],
-      selectedContainerId: null
+      selectedContainerId: null,
+      measureDistanceFrom: 'edges'
     };
   },
 
@@ -18,7 +19,12 @@ window.LayoutEditor = React.createClass({
         currentPage: pageNumber,
         selectedContainerId: null,
         containers: data.containers,
-        margins: data.margins
+        margins: {
+          top: parseFloat(data.margins.top),
+          right: parseFloat(data.margins.right),
+          bottom: parseFloat(data.margins.bottom),
+          left: parseFloat(data.margins.left)
+        }
       });
     }.bind(this));
   },
@@ -65,14 +71,29 @@ window.LayoutEditor = React.createClass({
     this.setState(this.state);
   },
 
+  updateMeasureDistanceFrom: function(value) {
+    this.setState({
+      measureDistanceFrom: value
+    });
+  },
+
   render: function() {
     var containerEditor = null;
     if (this.state.selectedContainerId) {
+      debugger;
       let selectedContainer = this.findContainer(this.state.selectedContainerId);
       containerEditor = <ContainerEditor
         key={this.state.selectedContainerId}
-        container={selectedContainer}
+        containerId={this.state.selectedContainerId}
+        x={selectedContainer.x}
+        y={selectedContainer.y}
+        width={selectedContainer.width}
+        height={selectedContainer.height}
+        marginTop={this.state.margins.top}
+        marginLeft={this.state.margins.left}
+        distanceFrom={this.state.measureDistanceFrom}
         onUpdate={this.updateContainer}
+        onMeasureDistanceFromChanged={this.updateMeasureDistanceFrom}
       />;
     }
 
