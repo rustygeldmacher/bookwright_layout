@@ -5,8 +5,8 @@
 - Make backup before saving
 - Allow showing pictures
 - Put page in the URL (push state?)
-- Remove autocomplete from input fields
-- "undo" by hitting escape on an input field
 
 [x] Allow measurements from margins
 [x] Clicking into an input selects it
+[x] "undo" by hitting escape on an input field
+[x] Remove autocomplete from input fields

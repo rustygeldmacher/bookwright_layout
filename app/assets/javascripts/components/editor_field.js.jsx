@@ -46,6 +46,7 @@ window.EditorField = React.createClass({
       type="text"
       name={ this.props.name }
       value={ this.state.value }
+      autoComplete="off"
       onKeyDown={ this.handleKeyDown }
       onChange={ this.handleChange }
       onBlur={ this.handleBlur }
