@@ -1,6 +1,12 @@
 - Allow for math expressions in the text entries
-- Allow measurements from margins
 - Allow measurements from nearest neighbor
 - Manual adjust using arrow keys
 - Alert when you try to page forward w/o saving
-- Clicking into an input selects it
+- Make backup before saving
+- Allow showing pictures
+- Put page in the URL (push state?)
+- Remove autocomplete from input fields
+- "undo" by hitting escape on an input field
+
+[x] Allow measurements from margins
+[x] Clicking into an input selects it

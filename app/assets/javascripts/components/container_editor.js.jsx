@@ -59,6 +59,13 @@ window.ContainerEditor = React.createClass({
     });
   },
 
+  handleFocus: function(e) {
+    var target = e.target;
+    setTimeout(function() {
+      target.select();
+    }, 0);
+  },
+
   editorField: function(name, label, value) {
     return(
       <div className="field">
@@ -69,6 +76,7 @@ window.ContainerEditor = React.createClass({
           value={ value }
           onChange={ this.changed }
           onBlur={ this.handleUpdate }
+          onFocus={ this.handleFocus }
         />
       </div>
     );
