@@ -40,7 +40,10 @@ window.EditorField = React.createClass({
 
   handleBlur: function(e) {
     if (this.valueHasChanged()) {
-      let sanitizedValue = String(this.state.value).replace(/[^0-9.\-+/*]/g, '');
+      let sanitizedValue =
+        String(this.state.value).
+          replace(/ +/g, '+').
+          replace(/[^0-9.\-+/*]/g, '');
       this.state.value = eval(sanitizedValue);
       this.props.onChange(this.props.name, this.state.value);
     }
