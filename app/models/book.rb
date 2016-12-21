@@ -9,6 +9,10 @@ class Book < ActiveRecord::Base
     Book.find('bbf2.xml')
   end
 
+  def page_count
+    xml.css('page').count
+  end
+
   def get_page(number)
     page_xml = xml.css("page[number=\"#{number}\"]").first
     Page.new(page_xml)
