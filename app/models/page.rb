@@ -19,13 +19,24 @@ class Page
   end
 
   def as_json(options = {})
+    # Margins in units of pixels, 36 pixels = 1/2 inch
     {
+      # Original page: 8.5" x 10" mapped to a 12x12 book
+      # margins: {
+      #   top: 36,
+      #   right: page_number.even? ? 144 : 108,
+      #   bottom: 36,
+      #   left: page_number.even? ? 108 : 144
+      # },
+
+      # Original page: 9.875" x 11" mapped to a 12x12 book
       margins: {
-        top: 36,
-        right: page_number.even? ? 144 : 108,
-        bottom: 36,
-        left: page_number.even? ? 108 : 144
+        top: 18,
+        right: page_number.even? ? 117 : 36,
+        bottom: 18,
+        left: page_number.even? ? 36 : 117
       },
+
       containers: xml.css('container').map do |container|
         {
           id: container.get('id'),
